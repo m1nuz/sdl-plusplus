@@ -5,47 +5,49 @@
 
 #define LOG(...) fprintf(stdout, __VA_ARGS__)
 
-namespace sdl
-{
-    inline uint32_t renderer_get_sdl_flags(unsigned int flags)
-    {
-        uint32_t out = 0;
-
-        if (flags & renderer::SOFTWARE)
-            out |= SDL_RENDERER_SOFTWARE;
-
-        if (flags & renderer::ACCELERATED)
-            out |= SDL_RENDERER_ACCELERATED;
-
-        if (flags & renderer::PRESENT_VSYNC)
-            out |= SDL_RENDERER_PRESENTVSYNC;
-
-        if (flags & renderer::TARGET_TEXTURE)
-            out |= SDL_RENDERER_TARGETTEXTURE;
-
-        return out;
+namespace sdl {
+    renderer::renderer(const window &_w):
+        id(0), flags(0), w(_w) {
     }
 
-    renderer::renderer(const window *w, unsigned int flags):
-        id(SDL_CreateRenderer(static_cast<SDL_Window*>(w->id), -1, renderer_get_sdl_flags(flags)))
-    {
-        LOG("Create renderer %p\n", id);
-    }
-
-    renderer::~renderer()
-    {
+    renderer::~renderer() {
         LOG("Destroy renderer %p\n", id);
-
         SDL_DestroyRenderer(static_cast<SDL_Renderer*>(id));
     }
 
-    void renderer::clear(const renderer &r)
-    {
-        SDL_RenderClear(static_cast<SDL_Renderer*>(r.id));
+    renderer &renderer::software() {
+        flags |= SDL_RENDERER_SOFTWARE;
+        return *this;
     }
 
-    void renderer::present(const renderer &r)
-    {
-        SDL_RenderPresent(static_cast<SDL_Renderer*>(r.id));
+    renderer& renderer::accelerated() {
+        flags |= SDL_RENDERER_ACCELERATED;
+        return *this;
+    }
+
+    renderer& renderer::vsync() {
+        flags |= SDL_RENDERER_PRESENTVSYNC;
+        return *this;
+    }
+
+    renderer& renderer::target_texture() {
+        flags |= SDL_RENDERER_TARGETTEXTURE;
+        return *this;
+    }
+
+    renderer& renderer::create() {
+        id = SDL_CreateRenderer(static_cast<SDL_Window*>(w.id), -1, flags);
+        LOG("Create renderer %p\n", id);
+        return *this;
+    }
+
+    renderer &renderer::clear() {
+        SDL_RenderClear(static_cast<SDL_Renderer*>(id));
+        return *this;
+    }
+
+    renderer &renderer::present() {
+        SDL_RenderPresent(static_cast<SDL_Renderer*>(id));
+        return *this;
     }
 } // namespace sdl

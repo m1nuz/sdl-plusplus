@@ -6,24 +6,34 @@
 #include <string>
 
 int main(int argc, char *argv[]) {
-    sdl::window w("Test", 0, 0, 400, 400, sdl::window::OPENGL);
-    sdl::graphic_context gc(&w);
-    sdl::event e;
+    sdl::window window(argc, argv);
+    window.at(0, 0)
+            .across(400, 400)
+            .named("Opengl window")
+            .with_opengl()
+            .create();
+
+    sdl::graphic_context gc(window);
+    gc.version(4, 0)
+            .with_forward_context()
+            .with_core_profile()
+            .create();
 
     std::string version(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
     std::cout << "GL version: " << version << std::endl;
 
-    while (1) {
-        while(sdl::poll(e))
-        {
+    sdl::event e;
+
+    while (true) {
+        while(sdl::poll(e)) {
             if (e == sdl::event::QUIT)
                 return EXIT_SUCCESS;
         }
 
-        glClearColor(0, 0, 0, 1);
+        glClearColor(1, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        sdl::window::swap_buffers(w);
+        window.swap_buffers();
     }
 
     return EXIT_FAILURE;

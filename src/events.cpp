@@ -5,15 +5,12 @@
 
 #define LOG(...) fprintf(stdout, __VA_ARGS__)
 
-namespace sdl
-{
-    bool event::operator ==(int type)
-    {
+namespace sdl {
+    bool event::operator ==(int type) {
         return this->type == type;
     }
 
-    int poll(event &e)
-    {
+    int poll(event &e) {
         SDL_Event evnt;
         int ret = SDL_PollEvent(&evnt);
 

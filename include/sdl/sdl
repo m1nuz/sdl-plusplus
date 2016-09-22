@@ -8,69 +8,54 @@
 #define SDLPP_INIT_EXTERN extern
 #endif
 
-#include <stdint.h>
+#include <cstdint>
+#include <string>
 
 namespace sdl
 {
-    class renderer;
-    class graphic_context;
-    class graphic_attributes;
-
-    class window
-    {
+    class window final {
     public:
-        enum
-        {
-            FULLSCREEN          = 0x0001,
-            FULLSCREEN_DESKTOP  = 0x0002,
-            OPENGL              = 0x0004,
-            SHOWN               = 0x0008,
-            HIDDEN              = 0x0010,
-            BORDERLESS          = 0x0020,
-            RESIZABLE           = 0x0040,
-            MINIMIZED           = 0x0080,
-            MAXIMIZED           = 0x0100,
-            INPUT_GRABBED       = 0x0200,
-            INPUT_FOCUS         = 0x0400,
-            MOUSE_FOCUS         = 0x0800,
-            FOREIGN             = 0x1000,
-            ALLOW_HIGHDPI       = 0x2000,
-            MOUSE_CAPTURE       = 0x4000
-        };
-
         friend class renderer;
         friend class graphic_context;
 
-        window(const char *title, int x, int y, int w, int h, unsigned int flags);
+        window(int argc, char* argv[]);
         ~window();
 
-        static void set_title(window &w, const char *title);
-        static const char* get_title(const window &w);
+        window& at(const int x, const int y);
+        window& across(const int _w, const int _h);
+        window& named(const std::string& _title);
+        window& show();
+        window& with_opengl();
+        window& create();
 
-        // GL
-        static void swap_buffers(window &w);
+        void swap_buffers();
     private:
         void *id;
+        int x;
+        int y;
+        int w;
+        int h;
+        std::string title_text;
+        uint32_t flags;
     };
 
-    class renderer
-    {
+    class renderer final {
     public:
-        enum
-        {
-            SOFTWARE        = 0x0001,
-            ACCELERATED     = 0x0002,
-            PRESENT_VSYNC   = 0x0004,
-            TARGET_TEXTURE  = 0x0008
-        };
-
-        renderer(const window *w, unsigned int flags);
+        renderer(const window &_w);
         ~renderer();
 
-        static void clear(const renderer &r);
-        static void present(const renderer &r);
+        renderer& software();
+        renderer& accelerated();
+        renderer& vsync();
+        renderer& target_texture();
+        renderer& create();
+
+        renderer& clear();
+        renderer& present();
     public:
         void *id;
+        uint32_t flags;
+        const window& w;
     };
 
     class timer
@@ -79,11 +64,9 @@ namespace sdl
         static void delay(uint32_t ms);
     };
 
-    class event
-    {
+    class event {
     public:
-        enum
-        {
+        enum {
             QUIT = 0,
         };
 
@@ -94,48 +77,37 @@ namespace sdl
         int type;
     };
 
-    void set_attribute(const graphic_attributes &attrs, unsigned int attr, int value);
-    int get_attribute(const graphic_attributes &attrs, unsigned int attr);
-
-    class graphic_attributes
-    {
+    class graphic_context final {
     public:
-        friend void set_attribute(const graphic_attributes &, unsigned int, int);
-        friend int get_attribute(const graphic_attributes &, unsigned int);
-        graphic_attributes();
-        ~graphic_attributes();
-    private:
-        int attributes[30];
-    };
-
-    class graphic_context
-    {
-    public:
-        graphic_context(const window *w);
+        graphic_context(const window &_w);
         ~graphic_context();
+
+        graphic_context& doublebuffered();
+        graphic_context& version(const int major, const int minor);
+        graphic_context& with_core_profile();
+        graphic_context& with_forward_context();
+        graphic_context& create();
     public:
         void *id;
+        int attributes[30];
+        int context_flags;
+        const window& w;
     };
 
     int poll(event &e);
 
-    namespace detail
-    {
-        class _Init
-        {
+    namespace detail {
+        class _init {
         public:
-            _Init();
-            ~_Init();
+            _init();
+            ~_init();
         };
-        SDLPP_INIT_EXTERN _Init init;
-    }
-    // namespace detail
+        SDLPP_INIT_EXTERN _init init;
+    } // namespace detail
 } // namespace sdl
 
-namespace sdl
-{
-    namespace detail
-    {
+namespace sdl {
+    namespace detail {
 
     } // namespace detail
 } // namespace sdl

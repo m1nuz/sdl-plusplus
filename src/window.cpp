@@ -5,59 +5,61 @@
 
 #define LOG(...) fprintf(stdout, __VA_ARGS__)
 
-namespace sdl
-{
-    static uint32_t window_get_sdl_flags(unsigned int flags)
-    {
-        uint32_t out = 0;
-
-        if (flags & window::FULLSCREEN)
-            out |= SDL_WINDOW_FULLSCREEN;
-
-        if (flags & window::FULLSCREEN_DESKTOP)
-            out |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-
-        if (flags & window::OPENGL)
-            out |= SDL_WINDOW_OPENGL;
-
-        if (flags & window::SHOWN)
-            out |= SDL_WINDOW_SHOWN;
-
-        if (flags & window::HIDDEN)
-            out |= SDL_WINDOW_HIDDEN;
-
-        if (flags & window::BORDERLESS)
-            out |= SDL_WINDOW_BORDERLESS;
-
-        return out;
+namespace sdl {
+    window::window(int argc, char* argv[]) :
+        id(0), x(0), y(0), w(0), h(0), flags(0) {
     }
 
-    window::window(const char *title, int x, int y, int w, int h, unsigned int flags):
-        id(SDL_CreateWindow(title, x, y, w, h, window_get_sdl_flags(flags)))
-    {
-        LOG("Create window %p\n", id);
-    }
+    window::~window() {
+        if (id) {
+            LOG("Destroy window %p\n", id);
+            SDL_DestroyWindow(static_cast<SDL_Window*>(id));
+        }
 
-    window::~window()
-    {
-        LOG("Destroy window %p\n", id);
-
-        SDL_DestroyWindow(static_cast<SDL_Window*>(id));
         id = nullptr;
     }
 
-    void window::set_title(window &w, const char *title)
-    {
-        SDL_SetWindowTitle(static_cast<SDL_Window*>(w.id), title);
+    window& window::at(const int _x, const int _y) {
+        x = _x, y = _y;
+        return *this;
     }
 
-    const char *window::get_title(const window &w)
-    {
-        return SDL_GetWindowTitle(static_cast<SDL_Window*>(w.id));
+    window& window::across(const int _w, const int _h) {
+        w = _w, h = _h;
+        return *this;
     }
 
-    void window::swap_buffers(window &w)
-    {
-        SDL_GL_SwapWindow(static_cast<SDL_Window*>(w.id));
-    }   
+    window& window::named(const std::string& _title) {
+        if (!id)
+            title_text = _title;
+        else
+            SDL_SetWindowTitle(static_cast<SDL_Window*>(id), title_text.c_str());
+        return *this;
+    }
+
+    window& window::show() {
+        if (!id)
+            flags |= SDL_WINDOW_SHOWN;
+        else
+        {
+            flags |= SDL_WINDOW_SHOWN;
+            SDL_ShowWindow(static_cast<SDL_Window*>(id));
+        }
+        return *this;
+    }
+
+    window &window::with_opengl() {
+        flags |= SDL_WINDOW_OPENGL;
+        return *this;
+    }
+
+    window& window::create() {
+        id = SDL_CreateWindow(title_text.c_str(), x, y, w, h, flags);
+        LOG("Create window %p\n", id);
+        return *this;
+    }
+
+    void window::swap_buffers() {
+        SDL_GL_SwapWindow(static_cast<SDL_Window*>(id));
+    }
 } // namespace sdl

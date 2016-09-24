@@ -18,7 +18,12 @@ int main(int argc, char *argv[]) {
     });
 
     while (ev.poll()) {
-        renderer.clear()
+        renderer.draw_color({0, 0, 0, 0})
+                .clear()
+                .draw_color({255, 0, 0, 0})
+                .draw_point({200, 200})
+                .draw_line({0, 0}, {100, 100})
+                .draw_rect({300, 300, 50, 50}, true)
                 .present();
     }
 

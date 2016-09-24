@@ -13,4 +13,6 @@ namespace sdl {
     using renderer = detail::renderer;
     using event = detail::event;
     using graphic_context = detail::graphic_context;
+
+    using point = detail::point;
 } // namespace sdl

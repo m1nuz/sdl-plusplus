@@ -1,6 +1,5 @@
 #include <sdl/window>
 #include <sdl/renderer>
-
 #include <SDL2/SDL_render.h>
 
 #define LOG(...) fprintf(stdout, __VA_ARGS__)
@@ -42,13 +41,36 @@ namespace sdl {
             return *this;
         }
 
-        renderer &renderer::clear() {
+        renderer& renderer::clear() {
             SDL_RenderClear(static_cast<SDL_Renderer*>(id));
             return *this;
         }
 
-        renderer &renderer::present() {
+        renderer& renderer::present() {
             SDL_RenderPresent(static_cast<SDL_Renderer*>(id));
+            return *this;
+        }
+
+        renderer& renderer::draw_color(const color &c) {
+            SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(id), c.r, c.g, c.b, c.a);
+            return *this;
+        }
+
+        renderer& renderer::draw_point(const point &pt) {
+            SDL_RenderDrawPoint(static_cast<SDL_Renderer*>(id), pt.x, pt.y);
+            return *this;
+        }
+
+        renderer& renderer::draw_line(const point &pt1, const point &pt2) {
+            SDL_RenderDrawLine(static_cast<SDL_Renderer*>(id), pt1.x, pt1.y, pt2.x, pt2.y);
+            return *this;
+        }
+
+        renderer& renderer::draw_rect(const rect &rc, const bool fill) {
+            if (fill)
+                SDL_RenderFillRect(static_cast<SDL_Renderer*>(id), reinterpret_cast<const SDL_Rect *>(&rc));
+            else
+                SDL_RenderDrawRect(static_cast<SDL_Renderer*>(id), reinterpret_cast<const SDL_Rect *>(&rc));
             return *this;
         }
     } // namespace detail

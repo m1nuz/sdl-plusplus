@@ -22,5 +22,5 @@ int main(int argc, char *argv[]) {
                 .present();
     }
 
-    return EXIT_FAILURE;
+    return 0;
 }

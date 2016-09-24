@@ -35,5 +35,5 @@ int main(int argc, char *argv[]) {
         window.swap_buffers();
     }
 
-    return EXIT_FAILURE;
+    return 0;
 }

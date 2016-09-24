@@ -6,15 +6,14 @@
 #include <string>
 
 namespace sdl {
-    class graphic_context;
-
     namespace detail {
         class renderer;
+        class graphic_context;
 
         class window final {
         public:
             friend class renderer;
-            friend class sdl::graphic_context;
+            friend class graphic_context;
 
             window(int argc, char* argv[]);
             ~window();

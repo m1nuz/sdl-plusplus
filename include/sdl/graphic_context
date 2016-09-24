@@ -1,0 +1,27 @@
+// -*- C++ -*-
+
+#pragma once
+
+namespace sdl {
+    namespace detail {
+        class window;
+
+        class graphic_context final {
+        public:
+            graphic_context(const window &_w);
+            ~graphic_context();
+
+            graphic_context& doublebuffered();
+            graphic_context& version(const int major, const int minor);
+            graphic_context& with_core_profile();
+            graphic_context& with_forward_context();
+            graphic_context& with_debug_context();
+            graphic_context& create();
+        public:
+            void *id;
+            int attributes[30];
+            int context_flags;
+            const window& w;
+        };
+    } // namespace detail
+} // namespace sdl

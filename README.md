@@ -1,7 +1,7 @@
 # sdl-plusplus
 Pure C++ wrapper for SDL2
 
-Usage:
+## Usage:
 ```c++
 #include <sdl/sdl>
 

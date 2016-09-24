@@ -1,0 +1,20 @@
+// -*- C++ -*-
+
+#pragma once
+
+#ifndef SDL_PLUSPLUS_INIT
+#define SDLPP_INIT_EXTERN
+#else
+#define SDLPP_INIT_EXTERN extern
+#endif
+
+namespace sdl {
+    namespace detail {
+        class _init {
+        public:
+            _init();
+            ~_init();
+        };
+        SDLPP_INIT_EXTERN _init init;
+    } // namespace detail
+} // namespace sdl

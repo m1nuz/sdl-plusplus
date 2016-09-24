@@ -38,6 +38,11 @@ namespace sdl {
         return *this;
     }
 
+    graphic_context &graphic_context::with_debug_context() {
+        context_flags |= SDL_GL_CONTEXT_DEBUG_FLAG;
+        return *this;
+    }
+
     graphic_context& graphic_context::create() {
         LOG("Create graphic context %p\n", id);
 

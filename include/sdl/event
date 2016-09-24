@@ -1,0 +1,18 @@
+// -*- C++ -*-
+
+#pragma once
+
+#include <cstdint>
+#include <functional>
+
+namespace sdl {
+    namespace detail {
+        class event final {
+        public:
+            event& on_quit(std::function<bool ()> cb);
+            bool poll() const;
+        private:
+            std::function<bool ()> quit_cb;
+        };
+    } // namespace detail
+} // namespace sdl

@@ -4,22 +4,20 @@
 int main(int argc, char *argv[]) {
     sdl::window window(argc, argv);
     window.at(0, 0)
-            .across(400, 400)
-            .named("Simple window")
-            .create();
+          .across(400, 400)
+          .named("Simple window")
+          .create();
 
     sdl::renderer renderer(window);
     renderer.accelerated()
             .create();
 
-    sdl::event e;
+    sdl::event ev;
+    ev.on_quit([]() {
+        return false;
+    });
 
-    while (true) {
-        while(sdl::poll(e)) {
-            if (e == sdl::event::QUIT)
-                return EXIT_SUCCESS;
-        }
-
+    while (ev.poll()) {
         renderer.clear()
                 .present();
     }

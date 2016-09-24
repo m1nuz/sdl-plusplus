@@ -1,5 +1,5 @@
 #define SDL_PLUSPLUS_INIT
-#include <sdl/sdl>
+#include <sdl/init>
 
 #include <SDL2/SDL.h>
 

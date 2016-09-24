@@ -1,0 +1,40 @@
+// -*- C++ -*-
+
+#pragma once
+
+#include <cstdint>
+#include <string>
+
+namespace sdl {
+    class graphic_context;
+
+    namespace detail {
+        class renderer;
+
+        class window final {
+        public:
+            friend class renderer;
+            friend class sdl::graphic_context;
+
+            window(int argc, char* argv[]);
+            ~window();
+
+            window& at(const int x, const int y);
+            window& across(const int _w, const int _h);
+            window& named(const std::string& _title);
+            window& show();
+            window& with_opengl();
+            window& create();
+
+            void swap_buffers();
+        private:
+            void *id;
+            int x;
+            int y;
+            int w;
+            int h;
+            std::string title_text;
+            uint32_t flags;
+        };
+    } // namespace detail
+} // namespace sdl

@@ -8,28 +8,27 @@
 int main(int argc, char *argv[]) {
     sdl::window window(argc, argv);
     window.at(0, 0)
-            .across(400, 400)
-            .named("Opengl window")
-            .with_opengl()
-            .create();
+          .across(400, 400)
+          .named("Opengl window")
+          .with_opengl()
+          .create();
 
     sdl::graphic_context gc(window);
     gc.version(4, 0)
-            .with_forward_context()
-            .with_core_profile()
-            .create();
+      .with_forward_context()
+      .with_debug_context()
+      .with_core_profile()
+      .create();
 
     std::string version(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
     std::cout << "GL version: " << version << std::endl;
 
-    sdl::event e;
+    sdl::event ev;
+    ev.on_quit([]() {
+        return false;
+    });
 
-    while (true) {
-        while(sdl::poll(e)) {
-            if (e == sdl::event::QUIT)
-                return EXIT_SUCCESS;
-        }
-
+    while (ev.poll()) {
         glClearColor(1, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 

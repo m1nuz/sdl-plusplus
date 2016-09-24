@@ -1,6 +1,8 @@
 # sdl-plusplus
 Pure C++ wrapper for SDL2
 
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000?style=flat-square)]()
+
 ## Usage:
 ```c++
 #include <sdl/sdl>

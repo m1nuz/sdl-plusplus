@@ -7,6 +7,8 @@ file(GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 file(GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
      include/sdl/*.*)
 
+add_definitions(-D_GLIBCXX_HAVE_GETS)
+
 add_library(sdlplusplus ${headers} ${sources})
 set_property(TARGET sdlplusplus PROPERTY CXX_STANDARD 14)
 
